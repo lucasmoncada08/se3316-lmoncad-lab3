@@ -33,6 +33,7 @@ app.get('/api/timetable/:subjCode/:courseCode', (req, res) => {
         if (json[i]["subject"] === req.params.subjCode && json[i]["catalog_nbr"] === req.params.courseCode) {
             times = times.concat(json[i]["course_info"][0]["start_time"]);
             times = times.concat(json[i]["course_info"][0]["end_time"]);
+            times = times.concat(json[i]["course_info"][0]["days"]);
             times = times.concat(json[i]["course_info"][0]["ssr_component"]);
         }
     }
@@ -49,6 +50,7 @@ app.get('/api/timetable/:subjCode/:courseCode/:component', (req, res) => {
         if (json[i]["subject"] === req.params.subjCode && json[i]["catalog_nbr"] === req.params.courseCode && json[i]["course_info"][0]["ssr_component"] === req.params.component) {
             times = times.concat(json[i]["course_info"][0]["start_time"]);
             times = times.concat(json[i]["course_info"][0]["end_time"]);
+            times = times.concat(json[i]["course_info"][0]["days"]);
         }
     }
     if (times.length > 0)
