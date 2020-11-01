@@ -21,7 +21,10 @@ app.get('/api/coursecodes/:code', (req, res) => {
         if (json[i]["subject"] === req.params.code)
             courseCodes = courseCodes.concat(json[i]["catalog_nbr"]);
     }
-    res.send(courseCodes)
+    if (courseCodes.length > 0)
+        res.send(courseCodes)
+    else
+        res.status(404).send("The course ID given does not exist");
 });
 
 const port = process.env.PORT || 3000;
