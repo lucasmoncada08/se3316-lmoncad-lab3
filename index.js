@@ -12,6 +12,8 @@ var schedules = {
     courseCodes: []
 };
 
+app.use('/', express.static('static'))
+
 app.get('/api/subjects&description', (req, res) => {
     console.log(`Get request for ${req.url}`);
     var subjAndDescr = [];
