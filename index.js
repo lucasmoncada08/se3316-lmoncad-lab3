@@ -62,6 +62,17 @@ app.get('/api/timetable/view/:schedName', (req, res) => {
         res.status(404).send(`The given schedule name: ${req.params.schedName} is not defined`);
 });
 
+app.get('/api/timetable/listall', (req, res) => {
+    console.log(`Get request for ${req.url}`);
+    var len = schedules["scheduleNames"].length;
+    var schedAndNumCourses = [];
+    for (var i=0; i<len; i++) {
+        schedAndNumCourses = schedAndNumCourses.concat(schedules["scheduleNames"][i]);
+        schedAndNumCourses = schedAndNumCourses.concat(schedules["courseCodes"][i].length);
+    }
+    res.send(schedAndNumCourses);
+});
+
 app.delete('/api/timetable/deleteall', (req, res) => {
     console.log(`Get request for ${req.url}`);
     var len = schedules["scheduleNames"].length;
