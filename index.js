@@ -62,12 +62,32 @@ app.get('/api/timetable/view/:schedName', (req, res) => {
         res.status(404).send(`The given schedule name: ${req.params.schedName} is not defined`);
 });
 
+app.delete('/api/timetable/deleteall', (req, res) => {
+    console.log(`Get request for ${req.url}`);
+    var len = schedules["scheduleNames"].length;
+    schedules["scheduleNames"].splice(0, len);
+    schedules["subjects"].splice(0, len);
+    schedules["courseCodes"].splice(0, len);
+    res.send(schedules);
+});
+
+app.delete('/api/timetable/delete/:schedName', (req, res) => {
+    console.log(`Post request for ${req.url}`);
+    if (schedules["scheduleNames"].find(item => item == req.params.schedName)) {
+        var index = schedules["scheduleNames"].findIndex(item => item === req.params.schedName);
+        schedules["scheduleNames"].splice(index, 1);
+        schedules["subjects"].splice(index, 1);
+        schedules["courseCodes"].splice(index, 1);
+        res.send(schedules);
+    }
+    else
+        res.status(404).send(`The given schedule name: ${req.params.schedName} is not defined`);
+});
+
 app.post('/api/timetable/modify/:schedName', jsonParser, (req, res) => {
     console.log(`Post request for ${req.url}`);
     if (schedules["scheduleNames"].find(item => item == req.params.schedName)) {
         var index = schedules["scheduleNames"].findIndex(item => item === req.params.schedName);
-        console.log(index);
-        console.log(req.body);
         schedules["subjects"][index] = req.body.subjects;
         schedules["courseCodes"][index] = req.body.courseCodes;
         res.send(schedules);
