@@ -47,6 +47,21 @@ app.get('/api/timetable/new/:schedName', (req, res) => {
         res.status(404).send("The name entered already exists");
 });
 
+app.get('/api/timetable/view/:schedName', (req, res) => {
+    console.log(`Get request for ${req.url}`);
+    if (schedules["scheduleNames"].find(item => item == req.params.schedName)) {
+        var index = schedules["scheduleNames"].findIndex(item => item === req.params.schedName);
+        var subjAndCode = [];
+        for (var i=0; i<schedules["subjects"][index].length; i++) {
+            subjAndCode = subjAndCode.concat(schedules["subjects"][index][i]);
+            subjAndCode = subjAndCode.concat(schedules["courseCodes"][index][i]);
+        }
+        res.send(subjAndCode);
+    }
+    else
+        res.status(404).send(`The given schedule name: ${req.params.schedName} is not defined`);
+});
+
 app.post('/api/timetable/modify/:schedName', jsonParser, (req, res) => {
     console.log(`Post request for ${req.url}`);
     if (schedules["scheduleNames"].find(item => item == req.params.schedName)) {
