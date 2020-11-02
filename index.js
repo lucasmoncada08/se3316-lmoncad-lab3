@@ -1,7 +1,16 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+
 const app = express();
 
+const jsonParser = bodyParser.json();
+
 let json = require('./Lab3-timetable-data.json');
+var schedules = {
+    scheduleNames: [],
+    subjects: [],
+    courseCodes: []
+};
 
 app.get('/api/subjects&description', (req, res) => {
     console.log(`Get request for ${req.url}`);
@@ -24,6 +33,32 @@ app.get('/api/coursecodes/:code', (req, res) => {
         res.send(courseCodes)
     else
         res.status(404).send("The course ID given does not exist");
+});
+
+app.get('/api/timetable/new/:schedName', (req, res) => {
+    console.log(`Get request for ${req.url}`);
+    if (schedules["scheduleNames"].every(item => item != req.params.schedName)) {
+        schedules["scheduleNames"] = schedules["scheduleNames"].concat(req.params.schedName);
+        schedules["subjects"] = schedules["subjects"].concat([[]]);
+        schedules["courseCodes"] = schedules["courseCodes"].concat([[]]);
+        res.send(schedules);
+    }
+    else
+        res.status(404).send("The name entered already exists");
+});
+
+app.post('/api/timetable/modify/:schedName', jsonParser, (req, res) => {
+    console.log(`Post request for ${req.url}`);
+    if (schedules["scheduleNames"].find(item => item == req.params.schedName)) {
+        var index = schedules["scheduleNames"].findIndex(item => item === req.params.schedName);
+        console.log(index);
+        console.log(req.body);
+        schedules["subjects"][index] = req.body.subjects;
+        schedules["courseCodes"][index] = req.body.courseCodes;
+        res.send(schedules);
+    }
+    else
+        res.status(404).send(`The given schedule name: ${req.params.schedName} is not defined`);
 });
 
 app.get('/api/timetable/:subjCode/:courseCode', (req, res) => {
