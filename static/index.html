@@ -240,10 +240,25 @@
     <ol id="subjCodeAndDescrList"></ol>
     <br>
 
-    <h3>Get Course Codes for Given Subject Code</h3>
+    <h3>Get Course Codes for Given Subject Code <input type="text" id="subjCodeForCourseCodes" value="Subject Code"/> <button id="getCourseCodesWithSubjCode">Search</button></h3>
+    <ol id="courseCodesFromSubjList"></ol>
     <br>
 
-    <h3>Get Timetable Entry fir Given Subject Code, Course Code, and Course Component (Optional)</h3>
+    <h3>Get Timetable Entry for Given Subject Code and Course Code
+        <input type="text" id="subjCode1ForTimetable" value="Subject Code"/>
+        <input type="text" id="courseCode1ForTimetable" value="Course Code"/> 
+        <button id="getTimetableEntry">Search</button>
+    </h3>
+    <ul id="timetableEntryList"></ul>
+    <br>
+
+    <h3>Get Timetable Entry for Given Subject Code, Course Code, and Course Component 
+        <input type="text" id="subjCode2ForTimetable" value="Subject Code"/>
+        <input type="text" id="courseCode2ForTimetable" value="Course Code"/>
+        <input type="text" id="courseCompForTimetable" value="Course Component"/>
+        <button id="getTimetableEntryWComponent">Search</button>
+    </h3>
+    <ul id="timetableEntryWComponentList"></ul>
     <br>
 
     <h3>Create a New Schedule</h3>

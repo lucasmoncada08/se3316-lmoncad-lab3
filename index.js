@@ -34,7 +34,7 @@ app.get('/api/coursecodes/:code', (req, res) => {
     if (courseCodes.length > 0)
         res.send(courseCodes)
     else
-        res.status(404).send("The course ID given does not exist");
+        res.status(404).send(["The course ID given does not exist"]);
 });
 
 app.get('/api/timetable/new/:schedName', (req, res) => {
@@ -46,7 +46,7 @@ app.get('/api/timetable/new/:schedName', (req, res) => {
         res.send(schedules);
     }
     else
-        res.status(404).send("The name entered already exists");
+        res.status(404).send(["The name entered already exists"]);
 });
 
 app.get('/api/timetable/view/:schedName', (req, res) => {
@@ -61,7 +61,7 @@ app.get('/api/timetable/view/:schedName', (req, res) => {
         res.send(subjAndCode);
     }
     else
-        res.status(404).send(`The given schedule name: ${req.params.schedName} is not defined`);
+        res.status(404).send([`The given schedule name: ${req.params.schedName} is not defined`]);
 });
 
 app.get('/api/timetable/listall', (req, res) => {
@@ -94,7 +94,7 @@ app.delete('/api/timetable/delete/:schedName', (req, res) => {
         res.send(schedules);
     }
     else
-        res.status(404).send(`The given schedule name: ${req.params.schedName} is not defined`);
+        res.status(404).send([`The given schedule name: ${req.params.schedName} is not defined`]);
 });
 
 app.post('/api/timetable/modify/:schedName', jsonParser, (req, res) => {
@@ -106,14 +106,14 @@ app.post('/api/timetable/modify/:schedName', jsonParser, (req, res) => {
         res.send(schedules);
     }
     else
-        res.status(404).send(`The given schedule name: ${req.params.schedName} is not defined`);
+        res.status(404).send([`The given schedule name: ${req.params.schedName} is not defined`]);
 });
 
 app.get('/api/timetable/:subjCode/:courseCode', (req, res) => {
     console.log(`Get request for ${req.url}`);
     var times = [];
     for (var i=0; i<json.length; i++) {
-        if (json[i]["subject"] === req.params.subjCode && json[i]["catalog_nbr"] === req.params.courseCode) {
+        if (json[i]["subject"] == req.params.subjCode && json[i]["catalog_nbr"] == req.params.courseCode) {
             times = times.concat(json[i]["course_info"][0]["start_time"]);
             times = times.concat(json[i]["course_info"][0]["end_time"]);
             times = times.concat(json[i]["course_info"][0]["days"]);
@@ -123,14 +123,14 @@ app.get('/api/timetable/:subjCode/:courseCode', (req, res) => {
     if (times.length > 0)
         res.send(times);
     else
-        res.status(404).send("The subject code and course code combination is not valid");
+        res.status(404).send(["The subject code and course code combination is not valid"]);
 });
 
 app.get('/api/timetable/:subjCode/:courseCode/:component', (req, res) => {
     console.log(`Get request for ${req.url}`);
     var times = [];
     for (var i=0; i<json.length; i++) {
-        if (json[i]["subject"] === req.params.subjCode && json[i]["catalog_nbr"] === req.params.courseCode && json[i]["course_info"][0]["ssr_component"] === req.params.component) {
+        if (json[i]["subject"] == req.params.subjCode && json[i]["catalog_nbr"] == req.params.courseCode && json[i]["course_info"][0]["ssr_component"] == req.params.component) {
             times = times.concat(json[i]["course_info"][0]["start_time"]);
             times = times.concat(json[i]["course_info"][0]["end_time"]);
             times = times.concat(json[i]["course_info"][0]["days"]);
@@ -139,7 +139,7 @@ app.get('/api/timetable/:subjCode/:courseCode/:component', (req, res) => {
     if (times.length > 0)
         res.send(times);
     else
-        res.status(404).send("The subject code and course code combination is not valid");
+        res.status(404).send(["The subject code and course code combination is not valid"]);
 });
 
 // Function for outputting the few items that are not lecture components
