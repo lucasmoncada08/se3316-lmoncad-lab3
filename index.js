@@ -101,15 +101,31 @@ app.post('/api/timetable/modify/:schedName', jsonParser, (req, res) => {
     console.log(`Post request for ${req.url}`);
     if (schedules["scheduleNames"].find(item => item == req.params.schedName)) {
         var index = schedules["scheduleNames"].findIndex(item => item === req.params.schedName);
+        var match = false;
+        var allMatches = true;
         schedules["subjects"][index] = req.body.subjects;
         schedules["courseCodes"][index] = req.body.courseCodes;
-        res.send(schedules);
+        for (var i=0; i<schedules["subjects"][index].length; i++) {
+            match = false;
+            for (var j=0; j<json.length; j++) {
+                if (json[j]["subject"] == schedules["subjects"][index][i] && json[j]["catalog_nbr"] == schedules["courseCodes"][index][i])
+                    match = true;
+            }
+            if (!match) {
+                allMatches = false;
+                break;
+            }
+        }
+        if (allMatches)
+            res.send(schedules);
+        else
+            res.status(404).send(["The subject code and course code combination is not valid"]);
     }
     else
         res.status(404).send([`The given schedule name: ${req.params.schedName} is not defined`]);
 });
 
-app.get('/api/timetable/:subjCode/:courseCode', (req, res) => {
+app.get('/api/times/:subjCode/:courseCode', (req, res) => {
     console.log(`Get request for ${req.url}`);
     var times = [];
     for (var i=0; i<json.length; i++) {
@@ -126,7 +142,7 @@ app.get('/api/timetable/:subjCode/:courseCode', (req, res) => {
         res.status(404).send(["The subject code and course code combination is not valid"]);
 });
 
-app.get('/api/timetable/:subjCode/:courseCode/:component', (req, res) => {
+app.get('/api/times/:subjCode/:courseCode/:component', (req, res) => {
     console.log(`Get request for ${req.url}`);
     var times = [];
     for (var i=0; i<json.length; i++) {

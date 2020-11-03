@@ -261,10 +261,42 @@
     <ul id="timetableEntryWComponentList"></ul>
     <br>
 
-    <h3>Create a New Schedule</h3>
+    <h3>Create a New Schedule
+        <input type="text" id="newSchedInput" value="Schedule Name"/> <button id="createNewSchedule">Submit</button>
+    </h3>
+    <ul id="scheduleNames"></ul>
     <br>
 
     <h3>Save a List of Courses in a Schedule</h3>
+    <h4>Schedule: 
+        <input type="text" id="saveCoursesSchedName" value="Schedule Name"/>
+    </h4>
+    <h5>Course 1: 
+        <input type="text" id="course1SubjCode" value="Subject Code"/>
+        <input type="text" id="course1CourseCode" value="Course Code"/>
+        <input type="checkbox" id="course1Check"></input>
+    </h5>
+    <h5>Course 2: 
+        <input type="text" id="course2SubjCode" value="Subject Code"/>
+        <input type="text" id="course2CourseCode" value="Course Code"/>
+        <input type="checkbox" id="course2Check"></input>
+    </h5>
+    <h5>Course 3: 
+        <input type="text" id="course3SubjCode" value="Subject Code"/>
+        <input type="text" id="course3CourseCode" value="Course Code"/>
+        <input type="checkbox" id="course3Check"></input>
+    </h5>
+    <h5>Course 4: 
+        <input type="text" id="course4SubjCode" value="Subject Code"/>
+        <input type="text" id="course4CourseCode" value="Course Code"/>
+        <input type="checkbox" id="course4Check"></input>
+    </h5>
+    <h5>Course 5: 
+        <input type="text" id="course5SubjCode" value="Subject Code"/>
+        <input type="text" id="course5CourseCode" value="Course Code"/>
+        <input type="checkbox" id="course5Check"></input>
+    </h5>
+    <button id="submitModifySchedule">Submit</button>
     <br>
 
     <h3>Get the List of Subject Codes and Course Codes for a Given Schedule</h3>

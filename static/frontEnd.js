@@ -5,9 +5,22 @@ document.getElementById('getTimetableEntry').addEventListener('click', function(
     getTimetableEntry(document.getElementById('subjCode1ForTimetable').value, document.getElementById('courseCode1ForTimetable').value)});    
 document.getElementById('getTimetableEntryWComponent').addEventListener('click', function() {
     getTimetableEntryWComp(document.getElementById('subjCode2ForTimetable').value, document.getElementById('courseCode2ForTimetable').value, 
-    document.getElementById('courseCompForTimetable').value)});    
+    document.getElementById('courseCompForTimetable').value)});
+    
+// Create new schedule button
+document.getElementById('createNewSchedule').addEventListener('click', function() {
+    createNewSchedule(document.getElementById('newSchedInput').value)});
+
+// Submitting courses to a schedule button
+document.getElementById('submitModifySchedule').addEventListener('click', function() {
+    modifySchedule(document.getElementById('saveCoursesSchedName').value)});
 
 var currentTimetableData = [];
+var schedules = {
+    scheduleNames: [],
+    subjects: [],
+    courseCodes: []
+};
 
 function getSubjCodesAndDescrs() {
     fetch("/api/subjects&description")
@@ -46,7 +59,7 @@ function getCourseCodesWSubjCode(subjCode) {
 }
 
 function getTimetableEntry(subjCode, courseCode) {
-    fetch(`/api/timetable/${subjCode}/${courseCode}`)
+    fetch(`/api/times/${subjCode}/${courseCode}`)
     .then(res => res.json()
     .then(data => {
         currentTimetableData = data;
@@ -75,7 +88,7 @@ function getTimetableEntry(subjCode, courseCode) {
 }
 
 function getTimetableEntryWComp(subjCode, courseCode, courseComp) {
-    fetch(`/api/timetable/${subjCode}/${courseCode}/${courseComp}`)
+    fetch(`/api/times/${subjCode}/${courseCode}/${courseComp}`)
     .then(res => res.json()
     .then(data => {
         currentTimetableData = data;
@@ -99,6 +112,57 @@ function getTimetableEntryWComp(subjCode, courseCode, courseComp) {
             item.appendChild(document.createTextNode(`${data[0]}`));
             l.appendChild(item);
         }
+    })
+    )
+}
+
+function createNewSchedule(newSchedName) {
+    fetch(`/api/timetable/new/${newSchedName}`)
+    .then(res => res.json()
+    .then(data => {
+        schedules = data;
+        const l = document.getElementById('scheduleNames');
+        if (l.getElementsByTagName('li').length > 0) {
+            while (l.firstChild)
+                l.removeChild(l.firstChild);
+        }
+        if (data.length) {
+            var item = document.createElement('li');
+            item.appendChild(document.createTextNode(`${data[0]}`));
+            l.appendChild(item);
+            console.log(`in the if ${data}`);
+        }
+        else {
+            for (var i=0; i<data["scheduleNames"].length; i++) {
+                var item = document.createElement('li');
+                item.appendChild(document.createTextNode(`${data["scheduleNames"][i]}`));
+                l.appendChild(item);
+            }
+        }
+    })
+    )
+}
+
+function modifySchedule(schedName) {
+    const newCourses = {
+        subjects: [],
+	    courseCodes: []
+    }
+    for (var i=1; i<=5; i++) {
+        if (document.getElementById(`course${i}Check`).checked) {
+            newCourses["subjects"] =  newCourses["subjects"].concat(document.getElementById(`course${i}SubjCode`).value);
+            newCourses["courseCodes"] =  newCourses["courseCodes"].concat(document.getElementById(`course${i}CourseCode`).value);
+        }
+    }
+    fetch(`/api/timetable/modify/${schedName}`, {
+        method: 'POST',
+        headers: {'Content-type': 'application/json'},
+        body: JSON.stringify(newCourses)
+    })
+    .then(res => res.json()
+    .then(data => {
+        schedules = data;
+        console.log(data)
     })
     )
 }
