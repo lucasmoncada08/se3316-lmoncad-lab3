@@ -235,6 +235,10 @@
             <td class="fri"></td>
         </tr>
     </table>
+
+    <h2>Add Schedule to Timetable
+        <input type="text" id="scheduleToDisplay" value="Schedule Name"/> <button id="displayScheduleButton">Show</button>
+    </h2>
     
     <h3>Get All Avaliable Subject Codes and Descriptions <button id="getSubjCodeAndDescr">Search</button></h3>
     <ol id="subjCodeAndDescrList"></ol>
@@ -299,16 +303,29 @@
     <button id="submitModifySchedule">Submit</button>
     <br>
 
-    <h3>Get the List of Subject Codes and Course Codes for a Given Schedule</h3>
+    <h3>Get the List of Subject Codes and Course Codes for a Given Schedule
+        <input type="text" id="listCoursesSchedName" value="Schedule Name"/>
+        <button id="listCoursesInSchedule">Search</button>
+    </h3>
+    <ol id="coursesFromScheduleList"></ol>
     <br>
 
-    <h3>Get a List of Schedules and the Number of Courses in Each</h3>
+    <h3>Get a List of Schedules and the Number of Courses in Each 
+        <button id="listSchedulesAndCourses">Search</button>
+    </h3>
+    <ol id="allSchedulesAndCourseNumsList"></ol>
+
     <br>
 
-    <h3>Delete a Schedule</h3>
+    <h3>Delete a Schedule
+        <input type="text" id="deleteSchedName" value="Schedule Name"/>
+        <button id="deleteScheduleButton">Submit</button>
+    </h3>
     <br>
 
-    <h3>Delete All Schedules</h3>
+    <h3>Delete All Schedules
+        <button id="deleteAllButton">Submit</button>
+    </h3>
     <br>
 
     <script type="text/javascript" src="frontEnd.js"></script>

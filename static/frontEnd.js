@@ -15,6 +15,21 @@ document.getElementById('createNewSchedule').addEventListener('click', function(
 document.getElementById('submitModifySchedule').addEventListener('click', function() {
     modifySchedule(document.getElementById('saveCoursesSchedName').value)});
 
+// Searching for courses in a schedule button
+document.getElementById('listCoursesInSchedule').addEventListener('click', function() {
+    listCoursesFromSchedule(document.getElementById('listCoursesSchedName').value)});
+
+// Showing schedules and num of courses button
+document.getElementById('listSchedulesAndCourses').addEventListener('click', showSchedulesAndCourseNums);
+    
+// Deleting a schedule button
+document.getElementById('deleteScheduleButton').addEventListener('click', function() {
+    deleteSchedule(document.getElementById('deleteSchedName').value)});
+
+// Deleting all schedules button
+document.getElementById('deleteAllButton').addEventListener('click', deleteAllSchedules);
+
+
 var currentTimetableData = [];
 var schedules = {
     scheduleNames: [],
@@ -43,7 +58,6 @@ function getCourseCodesWSubjCode(subjCode) {
     fetch(`/api/coursecodes/${subjCode}`)
     .then(res => res.json()
     .then(data => {
-        console.log(data)
         const l = document.getElementById('courseCodesFromSubjList');
         if (l.getElementsByTagName('li').length > 0) {
             while (l.firstChild)
@@ -150,8 +164,8 @@ function modifySchedule(schedName) {
     }
     for (var i=1; i<=5; i++) {
         if (document.getElementById(`course${i}Check`).checked) {
-            newCourses["subjects"] =  newCourses["subjects"].concat(document.getElementById(`course${i}SubjCode`).value);
-            newCourses["courseCodes"] =  newCourses["courseCodes"].concat(document.getElementById(`course${i}CourseCode`).value);
+            newCourses["subjects"] = newCourses["subjects"].concat(document.getElementById(`course${i}SubjCode`).value);
+            newCourses["courseCodes"] = newCourses["courseCodes"].concat(document.getElementById(`course${i}CourseCode`).value);
         }
     }
     fetch(`/api/timetable/modify/${schedName}`, {
@@ -165,4 +179,54 @@ function modifySchedule(schedName) {
         console.log(data)
     })
     )
+}
+
+function listCoursesFromSchedule(schedName) {
+    fetch(`/api/timetable/view/${schedName}`)
+    .then(res => res.json()
+    .then(data => {
+        const l = document.getElementById('coursesFromScheduleList');
+        if (l.getElementsByTagName('li').length > 0) {
+            while (l.firstChild)
+                l.removeChild(l.firstChild);
+        }
+        for (var i=0; i<(data.length/2); i++) {
+            const item = document.createElement('li');
+            item.appendChild(document.createTextNode(`${data[i*2]} - ${data[i*2+1]}`));
+            l.appendChild(item);
+        }
+    })
+    )
+}
+
+function showSchedulesAndCourseNums() {
+    fetch('/api/timetable/listall')
+    .then(res => res.json()
+    .then(data => {
+        const l = document.getElementById('allSchedulesAndCourseNumsList');
+        if (l.getElementsByTagName('li').length > 0) {
+            while (l.firstChild)
+                l.removeChild(l.firstChild);
+        }
+        for (var i=0; i<(data.length/2); i++) {
+            const item = document.createElement('li');
+            item.appendChild(document.createTextNode(`${data[i*2]} has ${data[i*2+1]} courses`));
+            l.appendChild(item);
+        }
+    })
+    )
+}
+
+function deleteSchedule(schedName) {
+    fetch(`/api/timetable/delete/${schedName}`, {
+        method: 'DELETE',
+        headers: {'Content-type': 'application/json'},
+    })
+}
+
+function deleteAllSchedules() {
+    fetch(`/api/timetable/deleteall`, {
+        method: 'DELETE',
+        headers: {'Content-type': 'application/json'},
+    })
 }
