@@ -207,7 +207,6 @@ function modifySchedule(schedName) {
     .then(res => res.json()
     .then(data => {
         schedules = data;
-        console.log(data)
     })
     )
 }
@@ -291,7 +290,6 @@ async function displaySchedule(schedName) {
         .then(data => {
             times = times.concat(data);
             dataLengths = dataLengths.concat(data.length);
-            console.log(times);
         }))
     }
 
@@ -304,12 +302,9 @@ async function displaySchedule(schedName) {
         startTime = timeDict[`${times[timesIndex]}`];
         endTime = timeDict[`${times[timesIndex+1]}`];
         days = [];
-        console.log(startTime);
-        console.log(endTime);
         for (var j=timesIndex+2; j<(timesIndex+dataLengths[i]-1); j++) {
             days[j-timesIndex-2] = times[j];
         }
-        console.log(days);
         for (var j=0; j<days.length; j++) {
             for (var k=startTime; k<endTime; k++) {
                 var element = document.getElementById(`time${k}`).getElementsByClassName(`${days[j]}`)[0];
