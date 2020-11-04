@@ -1,8 +1,15 @@
+// Getting all subject codes and course codes button
 document.getElementById('getSubjCodeAndDescr').addEventListener('click', getSubjCodesAndDescrs);
+
+// Get course codes with given subject code button
 document.getElementById('getCourseCodesWithSubjCode').addEventListener('click', function() {
     getCourseCodesWSubjCode(document.getElementById('subjCodeForCourseCodes').value)});
-document.getElementById('getTimetableEntry').addEventListener('click', function() {
+
+// Get timetable entry components button 
+    document.getElementById('getTimetableEntry').addEventListener('click', function() {
     getTimetableEntry(document.getElementById('subjCode1ForTimetable').value, document.getElementById('courseCode1ForTimetable').value)});    
+
+// Get timetable entry components with course type (lec/tut/lab) button
 document.getElementById('getTimetableEntryWComponent').addEventListener('click', function() {
     getTimetableEntryWComp(document.getElementById('subjCode2ForTimetable').value, document.getElementById('courseCode2ForTimetable').value, 
     document.getElementById('courseCompForTimetable').value)});
@@ -43,6 +50,7 @@ var schedules = {
     subjects: [],
     courseCodes: []
 };
+// Dict for accessing timeslots in the timetable
 var timeDict = {
     "8:30 AM": 1, "9:00 AM": 2,
     "9:30 AM": 3, "10:00 AM": 4,
