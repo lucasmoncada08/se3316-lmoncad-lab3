@@ -29,12 +29,33 @@ document.getElementById('deleteScheduleButton').addEventListener('click', functi
 // Deleting all schedules button
 document.getElementById('deleteAllButton').addEventListener('click', deleteAllSchedules);
 
+// Displaying schedule button
+document.getElementById('displayScheduleButton').addEventListener('click', function() {
+    displaySchedule(document.getElementById('scheduleToDisplay').value)
+});
+
 
 var currentTimetableData = [];
 var schedules = {
     scheduleNames: [],
     subjects: [],
     courseCodes: []
+};
+var timeDict = {
+    "8:30 AM": 1, "9:00 AM": 2,
+    "9:30 AM": 3, "10:00 AM": 4,
+    "10:30 AM": 5, "11:00 AM": 6,
+    "11:30 AM": 7, "12:00 PM": 8,
+    "12:30 PM": 9, "1:00 PM": 10,
+    "1:30 PM": 11, "2:00 PM": 12,
+    "2:30 PM": 13, "3:00 PM": 14,
+    "3:30 PM": 15, "4:00 PM": 16,
+    "4:30 PM": 17, "5:00 PM": 18,
+    "5:30 PM": 19, "6:00 PM": 20,
+    "6:30 PM": 21, "7:00 PM": 22,
+    "7:30 PM": 23, "8:00 PM": 24,
+    "8:30 PM": 25, "9:00 PM": 26,
+    "9:30 PM": 27, "10:00 PM": 28
 };
 
 function getSubjCodesAndDescrs() {
@@ -229,4 +250,70 @@ function deleteAllSchedules() {
         method: 'DELETE',
         headers: {'Content-type': 'application/json'},
     })
+}
+
+async function displaySchedule(schedName) {
+    const table = document.getElementById('timetable');
+    // Removing prior display functionality
+    daysOfWeek = ["M", "Tu", "W", "Th", "F"];
+    for (var i=1; i<28; i++) {
+        for (var j=0; j<5; j++) {
+            var element = document.getElementById(`time${i}`).getElementsByClassName(`${daysOfWeek[j]}`)[0];
+            if (element.classList.length > 1) {
+                element.classList.remove("LEC");
+                element.classList.remove("TUT");
+                element.classList.remove("LAB");
+            }
+            if (element.firstChild)
+                element.removeChild(element.firstChild)
+        }
+    }
+
+    const l = document.getElementById('allSchedulesAndCourseNumsList');
+    if (l.getElementsByTagName('li').length > 0) {
+        while (l.firstChild)
+            l.removeChild(l.firstChild);
+    }
+
+    var schedIndex = schedules["scheduleNames"].findIndex(item => item == schedName);
+    var subjCodes = schedules["subjects"][schedIndex];
+    var courseCodes = schedules["courseCodes"][schedIndex];
+    var times = [];
+    var dataLengths = [];    
+
+    for (var i=0; i<subjCodes.length; i++) {
+        await fetch(`/api/times/${subjCodes[i]}/${courseCodes[i]}`)
+        .then(res => res.json()
+        .then(data => {
+            times = times.concat(data);
+            dataLengths = dataLengths.concat(data.length);
+            console.log(times);
+        }))
+    }
+
+    var timesIndex = 0;
+    var startTime;
+    var endTime;
+    var days = [];
+    
+    for (var i=0; i<dataLengths.length; i++) {
+        startTime = timeDict[`${times[timesIndex]}`];
+        endTime = timeDict[`${times[timesIndex+1]}`];
+        days = [];
+        console.log(startTime);
+        console.log(endTime);
+        for (var j=timesIndex+2; j<(timesIndex+dataLengths[i]-1); j++) {
+            days[j-timesIndex-2] = times[j];
+        }
+        console.log(days);
+        for (var j=0; j<days.length; j++) {
+            for (var k=startTime; k<endTime; k++) {
+                var element = document.getElementById(`time${k}`).getElementsByClassName(`${days[j]}`)[0];
+                element.classList.add(`${times[timesIndex+dataLengths[i]-1]}`);
+                element.appendChild(document.createTextNode(`${subjCodes[i]} - ${courseCodes[i]}`));
+            }
+        }
+        timesIndex += dataLengths[i];
+    }
+    
 }

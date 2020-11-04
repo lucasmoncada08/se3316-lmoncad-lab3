@@ -13,12 +13,20 @@ th {
     width: 18%;
 }
 
-/* td {
-
-} */
-
 tr {
     height: 1.5rem;
+}
+
+.LEC {
+    background-color: red;
+}
+
+.TUT {
+    background-color: blue;
+}
+
+.LAB {
+    background-color: green;
 }
 
 .col-header {
