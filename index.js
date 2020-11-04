@@ -158,19 +158,6 @@ app.get('/api/times/:subjCode/:courseCode/:component', (req, res) => {
         res.status(404).send(["The subject code and course code combination is not valid"]);
 });
 
-// Function for outputting the few items that are not lecture components
-app.get('/api/coursecomponents', (req, res) => {
-    console.log(`Get request for ${req.url}`);
-    var count = 0;
-    for (var i=0; i<json.length; i++) {
-        if (json[i]["course_info"][0]["ssr_component"] != 'LEC') {
-            console.log(json[i]);
-            count++;
-        }
-    }
-    res.send(count.toString());
-});
-
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);

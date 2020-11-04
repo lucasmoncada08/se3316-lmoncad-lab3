@@ -34,6 +34,8 @@ document.getElementById('displayScheduleButton').addEventListener('click', funct
     displaySchedule(document.getElementById('scheduleToDisplay').value)
 });
 
+// Filtering schedule button
+document.getElementById('filterButton').addEventListener('click', filterSchedule);
 
 var currentTimetableData = [];
 var schedules = {
@@ -269,12 +271,6 @@ async function displaySchedule(schedName) {
         }
     }
 
-    const l = document.getElementById('allSchedulesAndCourseNumsList');
-    if (l.getElementsByTagName('li').length > 0) {
-        while (l.firstChild)
-            l.removeChild(l.firstChild);
-    }
-
     var schedIndex = schedules["scheduleNames"].findIndex(item => item == schedName);
     var subjCodes = schedules["subjects"][schedIndex];
     var courseCodes = schedules["courseCodes"][schedIndex];
@@ -315,5 +311,27 @@ async function displaySchedule(schedName) {
         }
         timesIndex += dataLengths[i];
     }
+}
+
+async function filterSchedule() {
+    await displaySchedule(document.getElementById("scheduleToDisplay").value);
     
+    daysOfWeek = ["M", "Tu", "W", "Th", "F"];
+    for (var i=1; i<28; i++) {
+        for (var j=0; j<5; j++) {
+            var element = document.getElementById(`time${i}`).getElementsByClassName(`${daysOfWeek[j]}`)[0];
+            if (element.classList[1] == "LEC" && !document.getElementById("lecFilter").checked) {
+                element.classList.remove("LEC");
+                element.removeChild(element.firstChild)
+            }
+            if (element.classList[1] == "TUT" && !document.getElementById("tutFilter").checked) {
+                element.classList.remove("TUT");
+                element.removeChild(element.firstChild)
+            }
+            if (element.classList[1] == "LAB" && !document.getElementById("labFilter").checked) {
+                element.classList.remove("LAB");
+                element.removeChild(element.firstChild)
+            }
+        }
+    }
 }
